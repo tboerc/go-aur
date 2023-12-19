@@ -83,8 +83,7 @@ func (e *entry) pull() error {
 	fmt.Println("Running `git pull` inside ", e.path)
 
 	cmd := exec.Command("git", "pull")
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		return errors.New("failed to check for update")
 	}
 
@@ -129,18 +128,45 @@ func (e *entry) install() error {
 	}
 
 	if e.installver == NOT_INSTALLED {
-		fmt.Printf("\nInstalling %v...\n\n", e.pkg.name())
+		fmt.Printf("Installing %v...\n\n", e.pkg.name())
 	} else {
-		fmt.Printf("\nUpdating %v...\n\n", e.pkg.name())
+		fmt.Printf("Updating %v...\n\n", e.pkg.name())
 	}
 
 	cmd := exec.Command("makepkg", "-sirc")
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
-
 	if err := cmd.Run(); err != nil {
 		return errors.New("failed to install package")
 	}
+
+	fmt.Println("Running `git clean -dfx` inside ", e.path)
+
+	cmd = exec.Command("git", "clean", "-dfx")
+	if err := cmd.Run(); err != nil {
+		return errors.New("failed to check for update")
+	}
+
+	fmt.Println("Packege successfully installed")
+
+	return nil
+}
+
+func (e *entry) remove() error {
+	fmt.Printf("Removing %v...\n\n", e.pkg.name())
+
+	cmd := exec.Command("sudo", "pacman", "-Rns", e.pkg.name())
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	if err := cmd.Run(); err != nil {
+		return errors.New("failed to uninstall package")
+	}
+
+	if err := os.RemoveAll(e.path); err != nil {
+		return errors.New("failed to remove package folder")
+	}
+
+	fmt.Println("\nPackege successfully removed")
 
 	return nil
 }
