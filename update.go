@@ -49,7 +49,9 @@ var update = &cli.Command{
 		w.Flush()
 
 		for _, entry := range outdated {
-			entry.update()
+			if err := entry.install(); err != nil {
+				return err
+			}
 		}
 
 		return nil

@@ -11,7 +11,7 @@ func main() {
 	app := &cli.App{
 		Name:    "go-aur",
 		Version: "0.1.0",
-		Usage:   "another tool to help manage AUR packages",
+		Usage:   "another tool to manage AUR packages",
 		Authors: []*cli.Author{
 			{Name: "tboerc", Email: "tiago.boer@proton.me"},
 		},
