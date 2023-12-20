@@ -12,7 +12,7 @@ When executing `pacman`` commands, sometimes it will prompt the user to proceed 
 
 ## Installation
 
-- Use the Go command tool: `go install https://github.com/tboerc/go-aur`.
+- Use the Go command tool: `go install github.com/tboerc/go-aur@latest`.
 - Alternatively, download the executable from the [Releases](https://github.com/tboerc/go-aur/releases) and add it to your PATH.
 
 ## Reference
